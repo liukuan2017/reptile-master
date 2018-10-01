@@ -113,7 +113,7 @@ function getAllData(data) {//获取通知具体数据
 
                         let content = $('div#vsb_content');//内容
                         if(content.length == 0)
-                            content = $('div#vsb_content_501')
+                            content = $('div#vsb_content_501');
 
 
                         let files = $('form[name=_newscontent_fromname]').find('ul');
