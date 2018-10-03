@@ -114,55 +114,115 @@ function getAllData(data) {//获取通知具体数据
                         let file = [];
 
                         let timeTemp = array[1].split('');
-                        let timeJudge = '';
+                        let yearJudge = '';
+                        let monthJudge = '';
+                        let CountTime = 0;
                         for(let i = 0;i<timeTemp.length;i++)
                         {
                             if(timeTemp[i] == '-')
+                            {
+                                CountTime = i;
                                 break;
-                            timeJudge += timeTemp[i];
+                            }
+                                
+                            yearJudge += timeTemp[i];
+                        }
+                        for(let i = CountTime + 1;i<timeTemp.length;i++)
+                        {
+                            if(timeTemp[i] == '-')
+                                break;
+                            monthJudge += timeTemp[i];
                         }
 
+                        // if(data.url == 'http://ceb.dlut.edu.cn/info/1128/5822.htm')
+                        // console.log(monthJudge);
 
-                        if(parseFloat(timeJudge) > 2014)//2014年以后的文件分离
+                        if(parseFloat(yearJudge) > 2014)//2014年以后的文件分离
                         {
 
-                            files.find('li').each((index, element) => {
-                                let temp = element.children[1].attribs.href;
-                                element.children[1].attribs.href = base + temp;
-                            });
+                            if(parseFloat(yearJudge) == 2015&&parseFloat(monthJudge)<=3)//判断2015年页面改版之前
+                            {
+                                files = content.find('a');
+                                if(files.length > 0)
+                                    files.each((index, element) => {
+                                        if(element.children[0] != undefined)
+                                        {
 
-                            if (files.length > 0) {
-                                files[0].children.forEach(element => {
-                                    if (element.name === 'li') {
-                                        file.push({
-                                            link: element.children[1].attribs.href,
-                                            fileName: element.children[1].children[0].data
-                                        })
-                                    }
-                                });
+                                            if(element.children[0].name == 'u')
+                                            {
+                                                file.push({
+                                                    link: element.attribs.href,
+                                                    fileName: element.children[0].children[0].data
+                                                });
+                                                files.eq(index).remove();
+                                            }
+                                            if(element.children[0].name == 'img')
+                                                files.eq(index).remove();
+                                        }
+
+                                    });
                             }
-                            files.remove();
+                            else//新版网页
+                            {
+                                files.find('li').each((index, element) => {
+                                    let temp = element.children[1].attribs.href;
+                                    element.children[1].attribs.href = base + temp;
+                                });
+
+                                if (files.length > 0) {
+                                    files[0].children.forEach(element => {
+                                        if (element.name === 'li') {
+                                            file.push({
+                                                link: element.children[1].attribs.href,
+                                                fileName: element.children[1].children[0].data
+                                            })
+                                        }
+                                    });
+                                }
+                                files.remove();
+                            }
+
                         }
                         else
                         {
 
-                            files = content.find('a');
-                            if(files.length > 0)
-                                files.each((index, element) => {
-                                    if(element.children[0] != undefined)
-                                    {
+                            if((parseFloat(yearJudge) == 2010&&parseFloat(monthJudge)<=6))//判断2010年页面改版之前
+                            {
+                                files = content.find('a');
+                                if(files.length > 0)
+                                    files.each((index, element) => {
 
-                                        if(element.children[0].name == 'u')
+                                                file.push({
+                                                    link: element.attribs.href,
+                                                    fileName: element.children[0].data
+                                                });
+
+                                    });
+
+                              files.remove();
+                            }
+                            else//2015-2010期间的页面文件
+                            {
+                                files = content.find('a');
+                                if(files.length > 0)
+                                    files.each((index, element) => {
+                                        if(element.children[0] != undefined)
                                         {
-                                            file.push({
-                                                link: element.attribs.href,
-                                                fileName: element.children[0].children[0].data
-                                            })
-                                            files.eq(index).remove();
-                                        }
-                                    }
 
-                                });
+                                            if(element.children[0].name == 'u')
+                                            {
+                                                file.push({
+                                                    link: element.attribs.href,
+                                                    fileName: element.children[0].children[0].data
+                                                });
+                                                files.eq(index).remove();
+                                            }
+                                            if(element.children[0].name == 'img')
+                                                files.eq(index).remove();
+                                        }
+
+                                    });
+                            }
                         }
 
 
