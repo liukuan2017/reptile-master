@@ -129,7 +129,7 @@ function getAllData(data) {//获取通知具体数据
                             delete element.attribs.class;
                     });
 
-                    //替换图片url
+                    //替换图片src
                     content.find('img').each((index, element) =>{
                         element.attribs.src = base + element.attribs.src;
                         if (element.attribs.class != undefined)
