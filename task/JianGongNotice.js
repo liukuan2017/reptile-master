@@ -94,10 +94,7 @@ function getAllData(data) {//获取通知具体数据
 
                         let files = $('div#div_vote_id').parent().parent().next().next();
                         let file = [];
-                        // if(data.url == 'http://sche.dlut.edu.cn/info/1236/20025.htm')
-                        // {
-                        //     console.log(files);
-                        // }
+
 
                         let timeTemp = value.dateStr;
                         let yearJudge = '';
@@ -119,75 +116,27 @@ function getAllData(data) {//获取通知具体数据
                                 break;
                             monthJudge += timeTemp[i];
                         }
-
                         if(parseFloat(yearJudge) > 2014)//2014年以后的文件分离
                         {
-
-                            if(parseFloat(yearJudge) == 2015&&parseFloat(monthJudge)<=3)//判断2015年页面改版之前
-                            {
-                                files = content.find('a');
-                                if(files.length > 0)
-                                    files.each((index, element) => {
-                                        if(element.children[0] != undefined)
-                                        {
-
-                                            if(element.children[0].name == 'u')
-                                            {
-                                                file.push({
-                                                    link: element.attribs.href,
-                                                    fileName: element.children[0].children[0].data
-                                                });
-                                                files.eq(index).remove();
-                                            }
-                                            if(element.children[0].name == 'img')
-                                                files.eq(index).remove();
-                                        }
-
-                                    });
-                            }
-                            else//新版网页
+                            files.find('a').each((index, element) => {
+                                let temp = element.attribs.href;
+                                //替换herf为绝对路径
+                                element.attribs.href = base + temp;
+                                // console.log(element.attribs.href);
+                            });
+                            if(files.length > 0)
                             {
                                 files.find('a').each((index, element) => {
-                                    let temp = element.attribs.href;
-                                    //替换herf为绝对路径
-                                    element.attribs.href = base + temp;
-                                    //console.log(element.attribs.href);
+                                file.push({
+                                    link: element.attribs.href,
+                                    fileName: element.children[0].children[0].data
                                 });
 
-                                if (files.length > 0) {
-                                    files[0].children.forEach(element => {
-                                        if (element.name === 'a') {
-                                            file.push({
-                                                link: element.attribs.href,
-                                                fileName: element.children[0].children[0].data
-                                            })
-                                        }
-                                    });
-                                }
-                                files.remove();
+                            });
                             }
-
                         }
                         else
                         {
-
-                            if((parseFloat(yearJudge) == 2010&&parseFloat(monthJudge)<=6))//判断2010年页面改版之前
-                            {
-                                files = content.find('a');
-                                if(files.length > 0)
-                                    files.each((index, element) => {
-
-                                        file.push({
-                                            link: element.attribs.href,
-                                            fileName: element.children[0].data
-                                        });
-
-                                    });
-
-                                files.remove();
-                            }
-                            else//2015-2010期间的页面文件
-                            {
                                 files = content.find('a');
                                 if(files.length > 0)
                                     files.each((index, element) => {
@@ -207,12 +156,8 @@ function getAllData(data) {//获取通知具体数据
                                         }
 
                                     });
-                            }
+
                         }
-
-
-
-
 
                         //去除class
                         content.find('p').each((index, element) => {
