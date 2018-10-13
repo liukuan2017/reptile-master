@@ -10,7 +10,6 @@ const firstPage = '/bkspy/xsgz/sy/zytz.htm';
 // const firstPage = '/bkspy/xsgz/sy/zytz/8.htm';
 let db = require('../models/index');
 let news = db.models.News;
-let count = 0;
 function getNoticeTitleAndUrl(url) {
     return new Promise((resolve, reject) => {
         request
@@ -22,8 +21,6 @@ function getNoticeTitleAndUrl(url) {
                 }
                 else
                 {
-                    count++;
-                    console.log("这是第" + count + "次进入这个函数");
                     let $ = cheerio.load(res.text);
                     let data = [];
                     let html = $('table.winstyle74548');
@@ -31,11 +28,6 @@ function getNoticeTitleAndUrl(url) {
                     html.find('tr').each((index, element) => {
                         if (element.attribs.id !== undefined)
                         {
-                            // if(base + /(\/info[\s\S]{0,200})$/.exec(element.children[3].children[1].attribs.href)[0] == 'http://sche.dlut.edu.cn/info/1236/6600.htm')
-                            // {
-                            //     console.log(element.children[3].children[1].attribs.title);
-                            //     console.log(element.attribs.id);
-                            // }
                             data.push({
                                 name: element.children[3].children[1].attribs.title,
                                 url: base + /(\/info[\s\S]{0,200})$/.exec(element.children[3].children[1].attribs.href)[0]
@@ -55,8 +47,7 @@ function getNoticeTitleAndUrl(url) {
             });
     });
 }
-let itemsCount = 0;
-function getAllData(data) {//获取通知具体数据
+function getAllData(data) {
     return new Promise((resolve, reject) => {
         request
             .get(data.url)
@@ -122,7 +113,6 @@ function getAllData(data) {//获取通知具体数据
                                 let temp = element.attribs.href;
                                 //替换herf为绝对路径
                                 element.attribs.href = base + temp;
-                                // console.log(element.attribs.href);
                             });
                             if(files.length > 0)
                             {
@@ -232,8 +222,6 @@ function getAllData(data) {//获取通知具体数据
                     }
                     else
                     {
-                        itemsCount++;
-                        console.log("已被撤销的项目数：" + itemsCount);
                         resolve(true);
                     }
 
