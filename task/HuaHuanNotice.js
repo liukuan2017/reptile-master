@@ -25,7 +25,7 @@ function getNoticeTitleAndUrl(url) {
                         if (element.attribs.id !== undefined)
                         {
                             let urlTemp = '';
-                            if(element.children[3].children[1].attribs.href[0] == 'h')
+                            if(element.children[3].children[1].attribs.href.substring(0,4) == 'http')
                             {
                                 urlTemp = element.children[3].children[1].attribs.href;
                             }
