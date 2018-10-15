@@ -7,7 +7,6 @@ const cheerio = require('cheerio');
 const newsType = require('../config/config').type;
 const base = 'http://sche.dlut.edu.cn';
 const firstPage = '/bkspy/xsgz/sy/zytz.htm';
-// const firstPage = '/bkspy/xsgz/sy/zytz/8.htm';
 let db = require('../models/index');
 let news = db.models.News;
 function getNoticeTitleAndUrl(url) {
